@@ -1,3 +1,15 @@
+.panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.items {
+  background-color: rgb(24, 31, 31);
+  min-width: 40%;
+  align-self: center;
+}
+
 .container {
   min-height: 100vh;
   padding: 0 0.5rem;
