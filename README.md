@@ -24,3 +24,6 @@ Puedes correr el programa usando:
 npm run dev
 ## Dependencias 
 Primero deben tener node instalado y usar npm install. Ya que todos los paquetes estan en package.json.
+
+## MISC
+El readme y algunas variables clave fueron escritos en español por motivos de claridad.

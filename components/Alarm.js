@@ -1,6 +1,8 @@
 import React from 'react'
 
-
+/**
+ * Function that creates the Alarm component that triggers once the timer runs out
+ */
 const Alarm = React.forwardRef((_, ref) =>{
     return (
         <audio ref={ref}>

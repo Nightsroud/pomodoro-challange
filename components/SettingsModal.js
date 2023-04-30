@@ -9,6 +9,16 @@ import { Divider } from '@mui/material';
 import {TextField} from '@mui/material';
 import { Button } from '@mui/material';
 
+/**
+ * Function that creates the settings modal for the timer its triggered by clicking on the settings button
+ * @param {boolean} open
+ * @param {function} handleClose
+ * @param {ref} pomodoroRef
+ * @param {ref} pausaPequenaRef
+ * @param {ref} pausaLargaRef
+ * @param {function} updateDefaultValues
+ * @returns Settings modal component
+ */
 export default function SettingsModal({ open, handleClose, pomodoroRef, pausaPequenaRef, pausaLargaRef, updateDefaultValues}) {
 
   const style = {

@@ -16,22 +16,36 @@ const theme = createTheme({
 });
 
 /**
- * Function that calclulates the percentage done by the timer
- * @param {int} originalTime 
- * @param {int} usedTime 
- * @returns Rounded percentil calculation for circular progress bar
+ * Timer component, it contains the three buttons the timer and the start, stop and restart buttons
+ * @param {int} originalTime
+ * @param {function} selectOption
+ * @param {function} getTime
+ * @param {int} seconds
+ * @param {boolean} ticking
+ * @param {function} startAlarm
+ * @param {boolean} timesUp
+ * @param {function} muteAlarm
+ * @param {function} restart
+ * @returns Timer component
  */
-const calcPercentage = (originalTime, usedTime) => {
-  if (originalTime-usedTime !== 0) {
-    const percentage = Math.round((originalTime-usedTime)*100/originalTime);
-    return percentage;
-  } else {
-    return 0;
-  }
-};
-
 export default function Timer({originalTime, selectOption, getTime, seconds, ticking, startAlarm, timesUp, muteAlarm, reset}) {
-    const options = ["Pomodoro", "Pausa Corta", "Pausa Larga"];
+  const options = ["Pomodoro", "Pausa Corta", "Pausa Larga"];
+
+    /**
+   * Function that calclulates the percentage done by the timer
+   * @param {int} originalTime 
+   * @param {int} usedTime 
+   * @returns Rounded percentil calculation for circular progress bar
+   */
+  const calcPercentage = (originalTime, usedTime) => {
+    if (originalTime-usedTime !== 0) {
+      const percentage = Math.round((originalTime-usedTime)*100/originalTime);
+      return percentage;
+    } else {
+      return 0;
+    }
+  };
+
   return (
     
       <Stack
