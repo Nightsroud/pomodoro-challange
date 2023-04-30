@@ -38,12 +38,12 @@ export default function SettingsModal({ open, handleClose, pomodoroRef, pausaPeq
     {
       value: "Pausa Larga",
       ref: pausaLargaRef,
-      defaultValue: 25
+      defaultValue: 15
     }
   ];
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} keepMounted={true}>
       <Box sx={style}>
         <Stack
           direction="column"
@@ -70,7 +70,7 @@ export default function SettingsModal({ open, handleClose, pomodoroRef, pausaPeq
             {inputs.map((input, index) => (
               <div key={index}>
                 <Typography variant="subtitle1" component="h1">{input.value}</Typography>
-                <TextField id="outlined-basic" variant="outlined" type="number" defaultValue={input.defaultValue} ref={input.ref}/>
+                <TextField id="outlined-basic" variant="outlined" type="number" defaultValue={input.defaultValue} inputRef={input.ref}/>
               </div>
             ))}
           </Stack>

@@ -5,6 +5,7 @@ import { Typography } from '@mui/material';
 import { Stack } from '@mui/material';
 import { VolumeOff } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -14,7 +15,22 @@ const theme = createTheme({
   },
 });
 
-export default function Timer({ selector, selectOption, getTime, seconds, ticking, startAlarm, timesUp, muteAlarm, reset}) {
+/**
+ * Function that calclulates the percentage done by the timer
+ * @param {int} originalTime 
+ * @param {int} usedTime 
+ * @returns Rounded percentil calculation for circular progress bar
+ */
+const calcPercentage = (originalTime, usedTime) => {
+  if (originalTime-usedTime !== 0) {
+    const percentage = Math.round((originalTime-usedTime)*100/originalTime);
+    return percentage;
+  } else {
+    return 0;
+  }
+};
+
+export default function Timer({originalTime, selectOption, getTime, seconds, ticking, startAlarm, timesUp, muteAlarm, reset}) {
     const options = ["Pomodoro", "Pausa Corta", "Pausa Larga"];
   return (
     
@@ -36,9 +52,19 @@ export default function Timer({ selector, selectOption, getTime, seconds, tickin
           </ThemeProvider>
         ))}
         </Stack>
-        <ThemeProvider theme={theme}>
-          <Typography variant="h1" color='primary'>{getTime()}:{seconds.toString().padStart(2, "0")}</Typography>
-        </ThemeProvider>
+        {ticking ? 
+          // <CircularProgress variant='determinate' value={ parseInt(originalTime) - parseInt(getTime()) !== 0 ? `${Math.round(parseInt(getTime())*100/parseInt(originalTime))}%`: 0}/>
+          <div style={{ position: "relative", width: "100%", height: "100%" }}>
+            <ThemeProvider theme={theme}>
+              <CircularProgress variant="determinate" value={calcPercentage(originalTime, getTime())} size="100%" thickness={1.5}/>
+              <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography variant="h1" component="div" color='primary'>{getTime()}:{seconds.toString().padStart(2, "0")}</Typography>
+              </div>
+            </ThemeProvider>
+          </div>
+          : <ThemeProvider theme={theme}>
+              <Typography variant="h1" color='primary'>{getTime()}:{seconds.toString().padStart(2, "0")}</Typography>
+            </ThemeProvider>}
         <Stack
           direction="row"
           justifyContent="center"
@@ -53,7 +79,7 @@ export default function Timer({ selector, selectOption, getTime, seconds, tickin
         </Stack>
         {ticking && (
           <ThemeProvider theme={theme}>
-            <Button variant='outlined' onClick={reset}>Resetear</Button>
+            <Button variant='outlined' onClick={reset}>Reiniciar</Button>
           </ThemeProvider>)}
     </Stack>
   )

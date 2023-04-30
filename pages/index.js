@@ -8,15 +8,23 @@ import Alarm from '../components/Alarm.js';
 import SettingsModal from '../components/SettingsModal.js';
 import React from 'react';
 
+/**
+ * 
+ * @returns Principal aplication window
+ */
 export default function Index() {
 
   const [pomodoro, setPomodoro] = useState(25);
   const [pausaPequena, setPausaPequena] = useState(5);
-  const [pausaLarga, setPausaLarga] = useState(25);
+  const [pausaLarga, setPausaLarga] = useState(15);
+  const [originalPomodoro, setOriginalPomodoro] = useState(25);
+  const [originalPausaPequena, setOriginalPausaPequena] = useState(5);
+  const [originalPausaLarga, setOriginalPausaLarga] = useState(15);
   const [seconds, setSeconds] = useState(0);
   const [ticking, setTicking] = useState(false);
   const [usedSecond, setUsedSecond] = useState(0);
   const [timesUp, setTimesUp] = useState(false);
+  const [originalTime, setOriginalTime] = useState(25);
 
   const [selector, setSelector] = useState(0);
   const [open, setOpen] = useState(false);
@@ -31,10 +39,6 @@ export default function Index() {
   const pomodoroRef = useRef();
   const pausaPequenaRef = useRef();
   const pausaLargaRef = useRef();
-
-  console.log(pomodoroRef);
-  console.log(pausaPequenaRef);
-  console.log(pausaLargaRef);
   
   /**
    * Function used to set numerical values of the timer using settings modal, also resets timer
@@ -43,9 +47,13 @@ export default function Index() {
     setPomodoro(pomodoroRef.current.value);
     setPausaPequena(pausaPequenaRef.current.value);
     setPausaLarga(pausaLargaRef.current.value);
+    setOriginalPomodoro(pomodoroRef.current.value);
+    setOriginalPausaPequena(pausaPequenaRef.current.value);
+    setOriginalPausaLarga(pausaLargaRef.current.value);
     setOpen(false);
     setSeconds(0);
     setUsedSecond(0);
+    setOriginalTime(getOriginalTime());
   };
 
   /**
@@ -58,8 +66,8 @@ export default function Index() {
     const switching = usedSecond && selector !== index ? 
     confirm("Estas seguro que quieres cambiar de temporizador?"): false;
     if (switching) {
-      reset();
       setSelector(index);
+      reset();
     } else if(!usedSecond){
       setSelector(index);
     }
@@ -68,13 +76,26 @@ export default function Index() {
   /**
    * 
    * @returns Number
-   * Function used to get time values from any of the three available values
+   * Function used to get time values from any of the three available variables
    */
   const getTime = () => {
     const type = {
       0: pomodoro,
       1: pausaPequena,
       2: pausaLarga
+    }
+    return type[selector];
+  };
+
+  /**
+   * Function used to get start time values from any of the three available variables
+   * @returns Number
+   */
+  const getOriginalTime = () => {
+    const type = {
+      0: originalPomodoro,
+      1: originalPausaPequena,
+      2: originalPausaLarga
     }
     return type[selector];
   };
@@ -154,6 +175,7 @@ export default function Index() {
 		};
     const time = setInterval(() => {
       if(ticking) {
+        setOriginalTime(getOriginalTime());
         setUsedSecond((sec) => sec + 1);
         timerTicking();
       }
@@ -162,7 +184,7 @@ export default function Index() {
     return () => {
       clearInterval(time);
     }
-  },[seconds, pomodoro, pausaPequena, pausaLarga, ticking]);
+  },[seconds, pomodoro, pausaPequena, pausaLarga, ticking, originalTime]);
 
   return (
     <Stack
@@ -174,8 +196,8 @@ export default function Index() {
        <IconButton size='large' onClick={handleOpen}>
               <Settings/>
       </IconButton>
-      <Timer 
-        selector={selector} 
+      <Timer
+        originalTime={originalTime}
         selectOption={selectOption} 
         getTime={getTime}
         seconds={seconds}
