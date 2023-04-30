@@ -21,8 +21,6 @@ Se usó bastante las llamadas de estados setState y useRef para poder asentar va
 
 ## Como ejecutar el codigo
 Puedes correr el programa usando:
-'''
 npm run dev
-'''
 ## Dependencias 
 Primero deben tener node instalado y usar npm install. Ya que todos los paquetes estan en package.json.
