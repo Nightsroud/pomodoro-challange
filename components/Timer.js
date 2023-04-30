@@ -3,6 +3,8 @@ import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/material';
+import { VolumeOff } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -12,7 +14,7 @@ const theme = createTheme({
   },
 });
 
-export default function Timer({ selector, selectOption, getTime, seconds, ticking, setTicking}) {
+export default function Timer({ selector, selectOption, getTime, seconds, ticking, startAlarm, timesUp, muteAlarm, reset}) {
     const options = ["Pomodoro", "Pausa Corta", "Pausa Larga"];
   return (
     
@@ -29,7 +31,7 @@ export default function Timer({ selector, selectOption, getTime, seconds, tickin
         spacing={2}
       >
         {options.map((option, index) => (
-          <ThemeProvider theme={theme}>
+          <ThemeProvider key={index} theme={theme}>
             <Button size='small' key={index} onClick={() => selectOption(index)}>{option}</Button>
           </ThemeProvider>
         ))}
@@ -37,7 +39,22 @@ export default function Timer({ selector, selectOption, getTime, seconds, tickin
         <ThemeProvider theme={theme}>
           <Typography variant="h1" color='primary'>{getTime(selector)}:{seconds.toString().padStart(2, "0")}</Typography>
         </ThemeProvider>
-        <Button sx={{color: 'theme.palette.primary.light'}} variant='contained' onClick={() => setTicking((ticking) => !ticking)}>{ticking? "Detener" : "Empezar"}</Button>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+        >
+          <Button sx={{color: 'theme.palette.primary.light'}} variant='contained' onClick={startAlarm}>{ticking? "Detener" : "Empezar"}</Button>
+          {timesUp && (
+            <IconButton size='large' onClick={muteAlarm}>
+              <VolumeOff/>
+            </IconButton>)}
+        </Stack>
+        {ticking && (
+          <ThemeProvider theme={theme}>
+            <Button variant='outlined' onClick={reset}>Resetear</Button>
+          </ThemeProvider>)}
     </Stack>
   )
 }
