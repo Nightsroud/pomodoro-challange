@@ -53,7 +53,6 @@ export default function Timer({originalTime, selectOption, getTime, seconds, tic
         ))}
         </Stack>
         {ticking ? 
-          // <CircularProgress variant='determinate' value={ parseInt(originalTime) - parseInt(getTime()) !== 0 ? `${Math.round(parseInt(getTime())*100/parseInt(originalTime))}%`: 0}/>
           <div style={{ position: "relative", width: "100%", height: "100%" }}>
             <ThemeProvider theme={theme}>
               <CircularProgress variant="determinate" value={calcPercentage(originalTime, getTime())} size="100%" thickness={1.5}/>

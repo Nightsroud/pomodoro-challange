@@ -57,10 +57,9 @@ export default function Index() {
   };
 
   /**
-   * 
-   * @param {Number} index 
    * Function used to warn the user in case they switch timer in the middle of the countdown
    * Timer is reset in case user switches
+   * @param {Number} index 
    */
   const selectOption = (index) => {
     const switching = usedSecond && selector !== index ? 
@@ -74,9 +73,8 @@ export default function Index() {
   };
 
   /**
-   * 
-   * @returns Number
    * Function used to get time values from any of the three available variables
+   * @returns Number
    */
   const getTime = () => {
     const type = {
@@ -154,8 +152,8 @@ export default function Index() {
   };
 
   /**
-   * @returns Set Method for minute values
    * Function that selects which update method to use
+   * @returns Set Method for minute values
    */
   const updateMinutes = () => {
     const updateSelection = {
@@ -168,6 +166,7 @@ export default function Index() {
 
   /**
    * Function from react library used to make the timer actually tick
+   * and update minutes and seconds values
    */
   useEffect(() => {
     window.onbeforeunload = () => {
