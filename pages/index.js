@@ -1,6 +1,5 @@
-import Grid2 from '@mui/material/Unstable_Grid2';
 import { IconButton } from '@mui/material';
-import { Button } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Settings } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import Timer from '../components/Timer.js';
@@ -37,6 +36,9 @@ export default function Index() {
   console.log(pausaPequenaRef);
   console.log(pausaLargaRef);
   
+  /**
+   * Function used to set numerical values of the timer using settings modal, also resets timer
+   */
   const updateDefaultValues = () => {
     setPomodoro(pomodoroRef.current.value);
     setPausaPequena(pausaPequenaRef.current.value);
@@ -46,6 +48,12 @@ export default function Index() {
     setUsedSecond(0);
   };
 
+  /**
+   * 
+   * @param {Number} index 
+   * Function used to warn the user in case they switch timer in the middle of the countdown
+   * Timer is reset in case user switches
+   */
   const selectOption = (index) => {
     const switching = usedSecond && selector !== index ? 
     confirm("Estas seguro que quieres cambiar de temporizador?"): false;
@@ -57,7 +65,12 @@ export default function Index() {
     }
   };
 
-  const getTime = (selector) => {
+  /**
+   * 
+   * @returns Number
+   * Function used to get time values from any of the three available values
+   */
+  const getTime = () => {
     const type = {
       0: pomodoro,
       1: pausaPequena,
@@ -66,23 +79,35 @@ export default function Index() {
     return type[selector];
   };
 
+  /**
+   * Function used to reset timer state once time is up as well as play the alarm
+   */
   const timeUp = () => {
     reset();
     setTimesUp(true);
     alarmRef.current.play();
   };
 
+  /**
+   * Function used to mute the alarm
+   */
   const muteAlarm = () => {
     alarmRef.current.pause();
     alarmRef.current.currentTime = 0;
   };
 
+  /**
+   * Function to setup the alarm, resets values
+   */
   const startAlarm = () => {
     setTimesUp(false);
     muteAlarm();
     setTicking((ticking) => !ticking);
   };
 
+  /**
+   * Function to reset timer minutes, seconds and state values
+   */
   const reset = () =>{
     setTicking(false);
     setSeconds(0);
@@ -90,6 +115,9 @@ export default function Index() {
     updateDefaultValues();
   };
 
+  /**
+   * Function that deducts seconds and minutes from the timer when needed
+   */
   const timerTicking = () => {
     const minutes = getTime(selector);
     const setMinutes = updateMinutes();
@@ -104,6 +132,10 @@ export default function Index() {
     }
   };
 
+  /**
+   * @returns Set Method for minute values
+   * Function that selects which update method to use
+   */
   const updateMinutes = () => {
     const updateSelection = {
       0: setPomodoro,
@@ -113,6 +145,9 @@ export default function Index() {
     return updateSelection[selector];
   };
 
+  /**
+   * Function from react library used to make the timer actually tick
+   */
   useEffect(() => {
     window.onbeforeunload = () => {
 			return usedSecond ? "Show waring" : null;
@@ -130,48 +165,36 @@ export default function Index() {
   },[seconds, pomodoro, pausaPequena, pausaLarga, ticking]);
 
   return (
-  <Grid2 container spacing={2} columns={3}>
-
-        <Grid2 xs display="flex" justifyContent="right" alignItems="right"></Grid2>
-
-        <Grid2 xs container columns={1}>
-          <Grid2 xs={4} display="flex" justifyContent="right" alignItems="right">
-            <IconButton size='large' onClick={handleOpen}>
+    <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >
+       <IconButton size='large' onClick={handleOpen}>
               <Settings/>
-            </IconButton>
-          </Grid2>
-          <Grid2 xs display="flex" justifyContent="center" alignItems="center">
-             <Timer 
-              selector={selector} 
-              selectOption={selectOption} 
-              getTime={getTime}
-              seconds={seconds}
-              ticking={ticking}
-              startAlarm={startAlarm}
-              timesUp={timesUp}
-              muteAlarm={muteAlarm}
-              reset={reset}
-             />
-          </Grid2>
-          <Grid2 xs display="flex" justifyContent="center" alignItems="center">
-             <Alarm ref={alarmRef}/>
-          </Grid2>
-          <Grid2 xs display="flex" justifyContent="center" alignItems="center">
-             <SettingsModal 
-             open={open} 
-             handleClose={handleClose}
-             pomodoroRef={pomodoroRef}
-             pausaPequenaRef={pausaPequenaRef}
-             pausaLargaRef={pausaLargaRef}
-             updateDefaultValues={updateDefaultValues}
-             />
-          </Grid2>
-
-        </Grid2>
-
-        <Grid2 xs display="flex" justifyContent="right" alignItems="right"></Grid2>
-
-      </Grid2>
+      </IconButton>
+      <Timer 
+        selector={selector} 
+        selectOption={selectOption} 
+        getTime={getTime}
+        seconds={seconds}
+        ticking={ticking}
+        startAlarm={startAlarm}
+        timesUp={timesUp}
+        muteAlarm={muteAlarm}
+        reset={reset}
+        />
+        <Alarm ref={alarmRef}/>
+        <SettingsModal 
+        open={open} 
+        handleClose={handleClose}
+        pomodoroRef={pomodoroRef}
+        pausaPequenaRef={pausaPequenaRef}
+        pausaLargaRef={pausaLargaRef}
+        updateDefaultValues={updateDefaultValues}
+        />
+      </Stack>
   )
 }
 

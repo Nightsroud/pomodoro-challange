@@ -37,7 +37,7 @@ export default function Timer({ selector, selectOption, getTime, seconds, tickin
         ))}
         </Stack>
         <ThemeProvider theme={theme}>
-          <Typography variant="h1" color='primary'>{getTime(selector)}:{seconds.toString().padStart(2, "0")}</Typography>
+          <Typography variant="h1" color='primary'>{getTime()}:{seconds.toString().padStart(2, "0")}</Typography>
         </ThemeProvider>
         <Stack
           direction="row"
